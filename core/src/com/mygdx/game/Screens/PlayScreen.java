@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("C:\\Users\\User\\Desktop\\STRATEGY\\res\\map\\grass_tileset_map1.tmx");
+        map = loader.load("res\\map\\grass_tileset_map1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map);
         renderer.setView(gameCam);
         Gdx.input.setInputProcessor(player);

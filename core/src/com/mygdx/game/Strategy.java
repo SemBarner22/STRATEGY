@@ -38,8 +38,8 @@ public class Strategy extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		startButtonTexture = new Texture(Gdx.files.internal("C:\\Users\\User\\Desktop\\STRATEGY\\res\\Interface\\start_button.png"));
-		exitButtonTexture = new Texture(Gdx.files.internal("C:\\Users\\User\\Desktop\\STRATEGY\\res\\Interface\\exit_button.png"));
+		startButtonTexture = new Texture(Gdx.files.internal("res\\Interface\\start_button.png"));
+		exitButtonTexture = new Texture(Gdx.files.internal("res\\Interface\\exit_button.png"));
 		//backGroundTexture = new Texture(Gdx.files.internal("menubackground.jpg"));
 		//backGroundSprite = new Sprite(backGroundTexture);
 		start = new ImageButton(new TextureRegionDrawable(new TextureRegion(startButtonTexture)));
