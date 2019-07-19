@@ -1,16 +1,16 @@
-package com.mygdx.game.Scenes;
+package com.mygdx.game.Entities;
 
 public class Position {
     public int x;
     public int y;
     public Position(int x, int y){
-      this.x = x;
-      this.y = y;
+        this.x = x;
+        this.y = y;
     }
     public int GetX(){
-      return x;
+        return x;
     }
     public int GetY(){
-      return y;
+        return y;
     }
 }
