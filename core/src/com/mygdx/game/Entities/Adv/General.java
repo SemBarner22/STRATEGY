@@ -25,7 +25,7 @@ public class General extends Advisor {
         this.mobility = level + ((int) (Math.random()) * 6 - 3);
         if (mobility < 0){
             mobility = 0;
-    }
+        }
         bonus[(int) (Math.random() * 4)] = 1;
         name = "Ildar Zagretdinov";
         ability = (int) (Math.random() * baseNumberOfAdvisorChar);

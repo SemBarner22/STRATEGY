@@ -6,7 +6,7 @@ import com.mygdx.game.Entities.Estate.Estate;
 public class Manufactor extends Estate {
     private int modProfit = 0;
     private int modProfitFromProduction = 0;
-    private int numAbility = 2;
+    private int numAbility = 5;
 
     public Manufactor() {
         ability = new Ability[numAbility];
@@ -31,6 +31,18 @@ public class Manufactor extends Estate {
             loyality -=150;
             plusMoney = partOfPover;
         }
+        if (num == 3 && ability[3].getTime() == 0){
+            ability[num].Activate(15);
+            loyality -=200;
+            power +=200;
+            manufatory = true;
+        }
+        if (num == 4 && ability[4].getTime() == 0){
+            ability[num].Activate(15);
+            loyality -=50;
+            power +=100;
+            financier = true;
+        }
     }
     @Override
     public void UpdateBonus(){
@@ -39,6 +51,11 @@ public class Manufactor extends Estate {
         }
         if (ability[2].getTime() == 5){
             modProfit = 0;
+        }
+        // обрабатываем постройку заводаж
+        int i = (int) (Math.random() * 1000);
+        if (i < loyality / 5 + power / 5){
+            manufatory = true;
         }
 
         if (partOfPover >= 500 && loyality >= 300){

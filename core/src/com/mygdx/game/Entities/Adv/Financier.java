@@ -2,7 +2,7 @@ package com.mygdx.game.Entities.Adv;
 
 import com.mygdx.game.Entities.Adv.Advisor;
 
-public class Financier extends Advisor {
+public class Financier extends Advisor  {
     private int baseNumberOfAdvisorChar = 1;
 
     public Financier() {

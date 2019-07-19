@@ -1,9 +1,36 @@
 package com.mygdx.game.Entities;
 
+import com.mygdx.game.Entities.Functional.CityAttack;
+import com.mygdx.game.Entities.Functional.CityCoordinate;
+import com.mygdx.game.Entities.Functional.MapOfArmies;
+import com.mygdx.game.Entities.Functional.Position;
+
 import java.util.ArrayList;
 
 //* Название ресурсов mineral RR CR
 public class World {
+    public World() {
+
+        //создаем карту для аттак городов
+        ArrayList<Position> pos = new ArrayList<Position>();
+        ArrayList<CityCoordinate> coord = new ArrayList<CityCoordinate>();
+        for (int i = 0; i < country.size(); i++){
+            for (int j = 0; j < country.get(i).getRegionControl().size(); j++){
+                for (int k = 0; k <country.get(i).getRegionControl().get(j).getCity().length; k++){
+                    pos.add(country.get(i).getRegionControl().get(j).getCity()[k].getPosition());
+                    coord.add(new CityCoordinate(i, j, k));
+                }
+            }
+        }
+        Position[] positions = new Position[pos.size()];
+        CityCoordinate[] cityCoordinates = new CityCoordinate[coord.size()];
+        for (int i = 0; i < pos.size(); i++){
+            positions[i] = pos.get(i);
+            cityCoordinates[i] = coord.get(i);
+        }
+        CityAttack cityAttack = new CityAttack(positions, cityCoordinates);
+    }
+
     // базовые настройки
     public static int baseProfitFromCity = 1;
     public static int baseProfitFromRegion = 1;
@@ -35,8 +62,12 @@ public class World {
     public static int baseCostInfrasructure = 1;
 
     public static int baseMaxMovement = 5;
+    public static int[] equipmentOfSquade = {1000, 1200, 1200, 1500, 1700, 2000, 2000, 1000};
     public static int baseNumberOfGeneralChar = 6;
     public static int baseDamage = 5;
+    public static int[] baseCostCreationSquad;
+    public static int baseMobilisation;
+    public static int baseCostMobilisation;
 
     public static int possibleAdvisors = 15;
 
@@ -47,6 +78,7 @@ public class World {
     private boolean endGame = false;
     private ArrayList<Gov> country = new ArrayList<Gov>();
     private int totalPopulation;
+    private CityAttack cityAttack;
 
     public static int heigthOfMap = 5;
     public static int wideOfMap = 5;
@@ -79,24 +111,73 @@ public class World {
 
 
 
-
     // Служебное
-    private int i = 0;
     public static boolean otladka = true;
-
-
-
     //не знаю где это оставить, поэтому пусть будут тут
     // Находит 2 армии по координатам и сталкивает их. Можно сократить конечно количество опреций, тк мы знаем первую страну, но есть варик делать
     // и все перемещения через карту армий
-    public void Battle(Position position, Position battle){
+    public void MoveArmy(Army army, Position second){
+        if ((!cityAttack.CheckPosition(second)) && army.CheckMove(second)){
+            if (mof.CheckPosition(second) == -1){
+                army.Move(second);
+                //проверяем алекватная ли клетка
+                if (cityAttack.CheckPositionCityAttack(second) == null |
+                        cityAttack.CheckPositionCityAttack(second).getCountry() == army.getCountry()){
+                } else { // если нет,то идет захват города
+                    int co = cityAttack.CheckPositionCityAttack(second).getCountry();
+                    int re = cityAttack.CheckPositionCityAttack(second).getRegion();
+                    int ci = cityAttack.CheckPositionCityAttack(second).getCity();
+                    Position cit = country.get(co).getRegionControl().get(re).getCity()[ci].getPosition();
+                    boolean defend = false;
+                    for (int i = -1; i <2; i++){
+                        for (int j = -1; j<2; j++){
+                            Position posi = new Position(cit.GetX() + i, cit.GetY() +j);
+                            if (mof.CheckPosition(posi) == co){
+                                defend = true;
+                            }
+                        }
+                    }
+                    boolean regionAttack = true;
+                    if (!defend){
+                        country.get(co).getRegionControl().get(re).getCity()[ci].setOwner(army.getCountry());
+                        for (int k = 0; k < country.get(co).getRegionControl().get(re).getCity().length; k++){
+                            if (country.get(co).getRegionControl().get(re).getCity()[k].getOwner() != army.getCountry()){
+                                regionAttack = false;
+                            }
+                        }
+                        if (regionAttack){
+                            if (country.get(army.getCountry()).getRegion().contains(country.get(co).getRegionControl().get(re))){
+                                country.get(co).getRegionControl().get(re).setOccupation(false);
+                            } else {
+                                country.get(co).getRegionControl().get(re).setOccupation(true);
+                            }
+                            country.get(army.getCountry()).getRegionControl().add(country.get(co).getRegionControl().get(re));
+                            country.get(co).getRegionControl().remove(country.get(co).getRegionControl().get(re));
+                        }
+                    }
+                }
+                //тут надо прописать дипломатическую атаку. Пока что дипломатии нет и просто атака всех армий,
+            } else if (mof.CheckPosition(second) != army.getCountry()) {
+                Battle(army.getPosition(), second);
+            }
+        }
+    }
+
+
+    private void Battle(Position position, Position battle){
         for (int j = 0; j < country.get(mof.CheckPosition(position)).army.size() ; j++){
             if (country.get(mof.CheckPosition(position)).army.get(j).getPosition() == position){
                 for (int k = 0; k < country.get(mof.CheckPosition(battle)).army.size() ; k++){
                     if (country.get(mof.CheckPosition(battle)).army.get(j).getPosition() == battle){
                         Fight(country.get(mof.CheckPosition(position)).army.get(j), country.get(mof.CheckPosition(battle)).army.get(j), country.get(mof.CheckPosition(position)).getModTactic(), country.get(mof.CheckPosition(battle)).getModTactic() );
-                        if (country.get(mof.CheckPosition(position)).army.get(j).getMorale() < 100){
-
+                        if (country.get(mof.CheckPosition(battle)).army.get(j).getMorale() < 100){
+                            int regi = (int) (Math.random() * country.get(mof.CheckPosition(battle)).getRegionControl().size());
+                            if (country.get(mof.CheckPosition(battle)).getRegionControl().get(regi).getCity()[0].CheckPosition()){
+                                country.get(mof.CheckPosition(battle)).army.get(j).
+                                        Move(country.get(mof.CheckPosition(battle)).getRegionControl().get(regi).getCity()[0].getPosArmy());
+                            } else {
+                                country.get(mof.CheckPosition(battle)).army.remove(j);
+                            }
                         }
                     }
                 }
@@ -105,9 +186,7 @@ public class World {
 
     }
     //функция, которая позволяет сражаться двум рамиям
-    public void Fight(Army army1, Army army2, int country1, int country2) {
-        army1.UpdateTactic(country.get(country1).getModTactic());
-        army2.UpdateTactic(country.get(country2).getModTactic());
+    private void Fight(Army army1, Army army2, int country1, int country2) {
         army1.UpdateSF();
         army2.UpdateSF();
         while ((army1.getMorale() > 100) && (army2.getMorale() > 100)){
@@ -134,6 +213,7 @@ public class World {
 
 
     public void Main() {
+        int i = 0;
         while (!endGame){
             i++;
             if (i == country.size()){

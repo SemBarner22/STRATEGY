@@ -1,5 +1,5 @@
 package com.mygdx.game.Entities;
-
+import com.mygdx.game.Entities.Functional.*;
 import java.util.ArrayList;
 
 public class City {
@@ -16,9 +16,46 @@ public class City {
     private int tax;
     private int religion;
     private int rebelLevel;
+    private int[] partArmy;
+    private boolean mobilisation;
 
     private int numberOfModificators = 0;
     private Modificator[] modificator = new Modificator[numberOfModificators];
+
+    private Position posArmy;
+    public boolean CheckPosition(){
+        for (int i = -1; i <2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if (World.mof.CheckPosition(new Position(position.GetX()+i, position.GetY()+j)) == -1 && (i != 0 | j != 0)){
+                    posArmy = new Position(position.GetX()+i, position.GetY()+j);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Position getPosArmy() {
+        return posArmy;
+    }
+    public int GetEquipment(){
+        int equipment = 0;
+        for (int i = 0; i<8; i++){
+            equipment += World.equipmentOfSquade[i] * population * World.baseMobilisation * partArmy[i] / 100;
+        }
+        return equipment;
+    }
+    public int[] Mobilisation(){
+        int[] armyMan = new int[8];
+        for (int i = 0; i<8; i++){
+            armyMan[i] = population * World.baseMobilisation * partArmy[i] / 100;
+        }
+        return armyMan;
+    }
+    // тут надо прописать бонусы от домов
+    public void UpdateModBuild(){
+
+    }
 
     public void Prosperity(){
         int i = (int) (Math.random() * 100);
@@ -147,4 +184,15 @@ public class City {
         modificator[i].Activate();
     }
 
+    public void setOwner(int owner) {
+        this.owner = owner;
+    }
+
+    public boolean isMobilisation() {
+        return mobilisation;
+    }
+
+    public void setMobilisation(boolean mobilisation) {
+        this.mobilisation = mobilisation;
+    }
 }

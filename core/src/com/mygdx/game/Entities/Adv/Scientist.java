@@ -2,7 +2,7 @@ package com.mygdx.game.Entities.Adv;
 
 import com.mygdx.game.Entities.Adv.Advisor;
 
-public class Scientist extends Advisor {
+public class Scientist extends Advisor  {
     private int baseNumberOfAdvisorChar = 1;
 
     public Scientist() {
@@ -11,3 +11,4 @@ public class Scientist extends Advisor {
 
     }
 }
+

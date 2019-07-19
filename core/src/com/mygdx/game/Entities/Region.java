@@ -1,6 +1,10 @@
 package com.mygdx.game.Entities;
 
+import com.mygdx.game.Entities.Functional.Modificator;
+import com.mygdx.game.Entities.Functional.Position;
+
 public class Region {
+    //
     private int squareOfGround = 10;
     private Position position;
     private City[] city;
@@ -17,6 +21,7 @@ public class Region {
     private int religion;
     private int rebelLevel;
     private int culture;
+    private boolean occupation;
 
     private int numberOfModificators = 0;
     private Modificator[] modificator = new Modificator[numberOfModificators];
@@ -156,5 +161,11 @@ public class Region {
         modificator[i].Activate();
     }
 
-}
+    public boolean isOccupation() {
+        return occupation;
+    }
 
+    public void setOccupation(boolean occupation) {
+        this.occupation = occupation;
+    }
+}

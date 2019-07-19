@@ -1,7 +1,6 @@
 package com.mygdx.game.Entities.Estate;
 
 import com.mygdx.game.Entities.Estate.Ability;
-
 public class Estate {
     protected int isInLobby = 0; // показывает является ли в частью лобби 1/0
     protected int power = 100;
@@ -17,10 +16,13 @@ public class Estate {
     // генералы
     protected int tactic;
     protected int rebelLevel;
+    protected boolean general = false;
 
     // промышленники
     protected int profitFromProduction;
     protected int plusMoney = 0;
+    protected boolean manufatory = false;
+    protected boolean financier = false;
 
     // кто-нибудь
     protected int modBuildingCost;
@@ -35,21 +37,20 @@ public class Estate {
     public int getProfit() {
         return profit;
     }
-
-    public void UpdateBonus() {
+    public void UpdateBonus(){
         tactic = 0;
         rebelLevel = 0;
         profit = 1;
     }
 
-    public void UpdateLP() {
-        for (int i = 0; i < ability.length; i++) {
+    public void UpdateLP(){
+        for (int i = 0; i < ability.length; i++){
             ability[i].Time();
         }
-        if (loyality > maxLoyality) {
+        if (loyality > maxLoyality){
             loyality -= loyalityIncrease;
         }
-        if (loyality < maxLoyality) {
+        if (loyality < maxLoyality){
             loyality += loyalityIncrease;
         }
         power += powerIncrease;
@@ -133,5 +134,29 @@ public class Estate {
 
     public int getProfitFromCity() {
         return profitFromCity;
+    }
+
+    public boolean isManufatory() {
+        return manufatory;
+    }
+
+    public void setManufatory(boolean manufatory) {
+        this.manufatory = manufatory;
+    }
+
+    public boolean isGeneral() {
+        return general;
+    }
+
+    public void setGeneral(boolean general) {
+        this.general = general;
+    }
+
+    public boolean isFinancier() {
+        return financier;
+    }
+
+    public void setFinancier(boolean financier) {
+        this.financier = financier;
     }
 }
