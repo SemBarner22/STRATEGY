@@ -7,6 +7,13 @@ public class Army {
     private static int baseMaxMorale = 10000;
     private static int baseMaxOrganisation = 1000;
 
+
+    
+
+
+
+
+
     private int country;
     private int[] armyMan;
     private int amount = 0;

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.Screens.OtherScreen;
 import com.mygdx.game.Screens.PlayScreen;
 
 public class Strategy extends Game {
@@ -72,10 +73,13 @@ public class Strategy extends Game {
 
             }
         });
-		exit.addListener(new EventListener() {
-			@Override
-			public boolean handle(Event event) {
-				return false;
+		exit.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.log("scroll", "Pressed"); //** Usually used to start Game, etc. **//
+				stage.clear();
+				setScreen(new OtherScreen(Strategy.this));
+				return true;
+
 			}
 		});
 	}
