@@ -12,6 +12,8 @@ public class Debt {
     }
     //something unnecessary
 
+    //unnecessary too
+
     public void PayDay(){
         time -=1;
     }
