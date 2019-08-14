@@ -1,18 +1,14 @@
-package com.mygdx.game.Entities;
+package com.mygdx.game.Entities.MainComponents.GovComponents;
+
 import com.mygdx.game.Entities.Adv.General;
-import com.mygdx.game.Entities.Functional.Position;
+import com.mygdx.game.Entities.BaseSettings.BS;
+import com.mygdx.game.Entities.Functional.Maps.Position;
+import com.mygdx.game.Entities.MainComponents.World;
 
 public class Army {
     // настройки
     private static int baseMaxMorale = 10000;
     private static int baseMaxOrganisation = 1000;
-
-
-    
-
-
-
-
 
     private int country;
     private int[] armyMan;
@@ -27,7 +23,7 @@ public class Army {
     private int equipment; // это средняя экипированность на тысячу солдат. В начале игры будет где то 1000, к концу дойдет до 2000.
     // Увеличивает как урон от огня, так и защиту. Рассчитывается как средняя экипированность делить на количество тысяч солдат
     private int movement;
-    private int maxMovement = World.baseMaxMovement;
+    private int maxMovement = BS.baseMaxMovement;
     private int prof; //2 если ополчение, 3 если наемная армия
     private General general;
     private Position position;
@@ -49,6 +45,27 @@ public class Army {
         morale = morale * (100 - 3 * (100 - i)) * 100 / maxMorale ;
         organization = organization * i / 100;
     }
+    public void LoseEquipment(int i){
+        equipment = equipment * i / 100;
+    }
+    public void WinBattle(){
+        morale += maxMorale / 2 + (int) (Math.random() * 1000);
+        if (morale > maxMorale){
+            morale = maxMorale;
+        }
+    }
+    public int LoseBattle(){
+        organization -= (int) (Math.random() * 20);
+        if (organization > 70){
+            return 1;
+        } else if (organization > 50){
+            return 2;
+        } else if (organization > 25){
+            return 3;
+        } else {
+            return 4;
+        }
+    }
 
     public boolean CheckMove(Position pos){
         if (Math.sqrt(Math.pow(pos.GetX() - position.GetX(), 2) + Math.pow(pos.GetY() - position.GetY(), 2)) * 10 > movement){
@@ -62,14 +79,14 @@ public class Army {
         movement -= (int) Math.sqrt(Math.pow(pos.GetX() - position.GetX(), 2) + Math.pow(pos.GetY() - position.GetY(), 2)) * 10;
         World.mof.moveArmy(position, pos);
     }
-    // для создания профессиональных армий
+// для создания профессиональных армий
     public Army(int country, int modMorale, int modOrganisation, Position position, int prof) {
         this.country = country;
         armyMan = new int[8];
         UpdateMaxArmy(modMorale, modOrganisation);
         maxEquipment = 0;
         this.morale = maxMorale * 60/100;
-        this.organization = 60;
+        this.organization = 70;
         this.position = position;
         this.prof = prof;
     }
@@ -82,7 +99,7 @@ public class Army {
         totalEquipment = (int) (equipment * maxEquipment);
         UpdateEquipment();
         this.morale = maxMorale * 80/100;
-        this.organization = 60;
+        this.organization = 70;
         this.position = position;
         this.prof = prof;
         this.armyMan = armyMan;
@@ -114,18 +131,18 @@ public class Army {
     }
     private void UpdateMaxEquipment(){
         maxEquipment = 0;
-        for (int i = 0; i < World.equipmentOfSquade.length; i++){
-            maxEquipment += World.equipmentOfSquade[i] * armyMan[i];
+        for (int i = 0; i < BS.equipmentOfSquade.length; i++){
+            maxEquipment += BS.equipmentOfSquade[i] * armyMan[i];
         }
     }
-    public void UpdateOrganisation(){
-        organization += 100;
+    public void UpdateOrganisation(int mod){
+        organization += 100 + mod;
         if (organization > maxOrganisation){
             organization = maxOrganisation;
         }
     }
-    public void UpdateMorale(){
-        morale += 1000;
+    public void UpdateMorale(int modIncrease){
+        morale += 10 * (100 + modIncrease);
         if (morale > maxMorale){
             morale = maxMorale;
         }
@@ -140,8 +157,8 @@ public class Army {
     public void Employ(int num){
         armyMan[num] +=1000;
         UpdateSF();
-        maxEquipment += World.equipmentOfSquade[num];
-        totalEquipment += World.equipmentOfSquade[num];
+        maxEquipment += BS.equipmentOfSquade[num];
+        totalEquipment += BS.equipmentOfSquade[num];
         UpdateEquipment();
     }
 
@@ -207,6 +224,14 @@ public class Army {
 
     public int getTotalEquipment() {
         return totalEquipment;
+    }
+
+    public void setOrganization(int organization) {
+        this.organization = organization;
+    }
+
+    public void setGeneral(General general) {
+        this.general = general;
     }
 }
 

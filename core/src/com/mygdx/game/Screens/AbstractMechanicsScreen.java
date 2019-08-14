@@ -13,14 +13,15 @@ import com.mygdx.game.Strategy;
 
 public class AbstractMechanicsScreen implements Screen {
     Strategy strategy;
-    protected MechanicsMenu mechanicsMenu;
+    protected Screen previousScreen;
     protected Stage stage;
     protected Table container;
     protected Skin skin;
+    protected Button backButton;
 
-    public AbstractMechanicsScreen(final Strategy strategy, final MechanicsMenu mechanicsMenu) {
+    public AbstractMechanicsScreen(final Strategy strategy, final Screen previousScreen) {
         this.strategy = strategy;
-        this.mechanicsMenu = mechanicsMenu;
+        this.previousScreen = previousScreen;
     }
 
     @Override
@@ -31,11 +32,10 @@ public class AbstractMechanicsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         container.setFillParent(true);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-        Button backButton = new TextButton("back", skin);
-        container.add(backButton).bottom().left().expandX();
+        backButton = new TextButton("back", skin);
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                strategy.setScreen(mechanicsMenu);
+                strategy.setScreen(previousScreen);
             }
         });
     }

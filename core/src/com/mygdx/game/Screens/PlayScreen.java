@@ -20,14 +20,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.*;
+import com.mygdx.game.Entities.MainComponents.World;
 import com.mygdx.game.Entities.Player;
-import com.mygdx.game.Entities.World;
 import com.mygdx.game.Strategy;
+
+import java.io.IOException;
 
 public class PlayScreen implements Screen {
 
     public boolean isMoveEnded;
-    public World world;
+    public static World world;
     private Player player;
     private TiledMap map;
     private OrthogonalTiledMapRendererWithSprites renderer;
@@ -46,7 +48,11 @@ public class PlayScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new FillViewport(Strategy.V_WIDTH, Strategy.V_HEIGHT, gameCam);
         stage = new Stage();
-        world = new World();
+        try {
+            world = new World();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -92,6 +98,7 @@ public class PlayScreen implements Screen {
         bottomTable.add(moveEndButton);
         moveEndButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+
             }
         });
     }
@@ -151,6 +158,7 @@ public class PlayScreen implements Screen {
                     renderer.render(new int[]{map.getLayers().getIndex("ProvReg" +
                             object.getProperties().get("RegIndex", Integer.class))});
                     strategy.batch.end();
+                    strategy.setScreen(new CityScreen(strategy, PlayScreen.this));
                 }
             }
         }

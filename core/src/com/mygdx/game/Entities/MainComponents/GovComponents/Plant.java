@@ -1,6 +1,12 @@
-package com.mygdx.game.Entities;
+package com.mygdx.game.Entities.MainComponents.GovComponents;
 
-import com.mygdx.game.Entities.World;
+import com.mygdx.game.Entities.MainComponents.World;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class Plant {
     private int resourceOfPlant;
@@ -11,6 +17,7 @@ public class Plant {
     private int levelOfPlant = 1;
     private int profit;
     private int upgradeTime;
+    private String name;
 
     // сделан для вывода дохода от одного предприятия
     public void UpdateProfit(){
@@ -56,15 +63,24 @@ public class Plant {
         }
         return 0;
     }
-
+    public static List<String> lines;
+    static {
+        try {
+            lines = Files.readAllLines(Paths.get("src\\Texts\\ResourceChain"), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public Plant(int resourceOfPlant) {
         this.resourceOfPlant = resourceOfPlant;
         upgradeTime = 2;
-        // надо переделат это все с ифами ибо вручную все это забивать жесть
-        this.fR = fR;
-        this.sR = sR;
-        this.fClass = fClass;
-        this.sClass = sClass;
+        String str[] = lines.get(resourceOfPlant*2).split(" ");
+        name = lines.get(resourceOfPlant * 2 + 1);
+        fR = Integer.parseInt(str[0]);
+        fClass = str[1];
+        sR = Integer.parseInt(str[2]);
+        sClass = str[3];
+        System.out.println(fR + fClass + sR + sClass);
     }
 
     public int getResourceOfPlant() {
@@ -102,5 +118,9 @@ public class Plant {
 
     public int getUpgradeTime() {
         return upgradeTime;
+    }
+
+    public String getName() {
+        return name;
     }
 }

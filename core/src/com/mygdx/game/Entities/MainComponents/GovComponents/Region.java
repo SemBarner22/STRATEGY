@@ -1,9 +1,17 @@
-package com.mygdx.game.Entities;
+package com.mygdx.game.Entities.MainComponents.GovComponents;
 
+import com.mygdx.game.Entities.BaseSettings.BS;
 import com.mygdx.game.Entities.Functional.Modificator;
-import com.mygdx.game.Entities.Functional.Position;
+import com.mygdx.game.Entities.Functional.Maps.Position;
+import com.mygdx.game.Entities.MainComponents.GovComponents.City;
+import com.mygdx.game.Entities.MainComponents.World;
 
 public class Region {
+    public Region(City[] city, int population, int prosperity, int squareOfGround) {
+        this.city = city;
+        this.population = population;
+        this.prosperity = prosperity;
+    }
     //
     private int squareOfGround = 10;
     private Position position;
@@ -32,12 +40,19 @@ public class Region {
             prosperity++;
         }
     }
+    public int CostOfInfrastructure(){
+        return (int) (Math.pow(1.4, infrastructure) * BS.baseCostInfrasructure * (100 - 5* prosperity) / 100);
+    }
+    public void UpgradeInfrastructure(){
+        infrastructure++;
+        Prosperity();
+    }
 
     public boolean ExchangeReligion(int prob){
         int i = (int) (Math.random() * 100);
         int mod = 0;
         for (int j = 0; j < modificator.length; j++){
-            mod += modificator[j].getModExchangeReligion();
+            mod += modificator[j].getModificator()[17];
         }
         if (i < prob - rebelLevel + mod){
             return true;
@@ -49,7 +64,7 @@ public class Region {
         int i = (int) (Math.random() * 1000);
         int mod = 0;
         for (int j = 0; j < modificator.length; j++){
-            mod += modificator[j].getModExchangeCulture();
+            mod += modificator[j].getModificator()[18];
         }
         if (i < prob - rebelLevel * 2 + mod){
             return true;
@@ -60,24 +75,20 @@ public class Region {
     public void UpdateRebelLevel(int level){
         rebelLevel = 0;
         for (Modificator value : modificator) {
-            rebelLevel += value.getRebelLevel();
+            rebelLevel += value.getModificator()[3];
         }
         rebelLevel -= prosperity - level;
     }
 
-    public Region(City[] city, int population, int prosperity, int squareOfGround) {
-        this.city = city;
-        this.population = population;
-        this.prosperity = prosperity;
-    }
+
 
     // эти два метода сделаны для вывода в окно региона
     public void UpdateProfitRR() {
-        profitRR = Math.min(population, squareOfGround * effectivity) * World.valueRR[resource] * infrastructure * (100 - autonomy) * World.baseProfitFromRegion / 100;
+        profitRR = Math.min(population, squareOfGround * effectivity) * World.valueRR[resource] * infrastructure * (100 - autonomy) * BS.baseProfitFromRegion / 100;
     }
 
     public void UpdateProfitMineral() {
-        profitMineral = (5 + infrastructure) * World.valueMineral[mineral] * (100 - autonomy) * baseMineralProduction * World.baseProfitFromMineral / 100;
+        profitMineral = (5 + infrastructure) * World.valueMineral[mineral] * (100 - autonomy) * baseMineralProduction * BS.baseProfitFromMineral / 100;
     }
 
 
@@ -169,3 +180,4 @@ public class Region {
         this.occupation = occupation;
     }
 }
+

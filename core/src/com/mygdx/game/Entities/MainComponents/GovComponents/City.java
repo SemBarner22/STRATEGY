@@ -1,15 +1,28 @@
-package com.mygdx.game.Entities;
-import com.mygdx.game.Entities.Functional.*;
+package com.mygdx.game.Entities.MainComponents.GovComponents;
+
+import com.mygdx.game.Entities.BaseSettings.BS;
+import com.mygdx.game.Entities.Functional.Modificator;
+import com.mygdx.game.Entities.Functional.Maps.Position;
+import com.mygdx.game.Entities.MainComponents.World;
+
 import java.util.ArrayList;
 
+
 public class City {
+    public City(int population, int infrastructure, int prosperity, int religion, Position pos) {
+        this.population = population;
+        this.infrastructure = infrastructure;
+        this.prosperity = prosperity;
+        this.religion = religion;
+        position = pos;
+    }
+
     private Position position;
-    private Building[] building = new Building[World.numberOfBuildings];
-    private ArrayList<Plant> plant = new ArrayList<Plant>();
+    private Building[] building = new Building[BS.numberOfBuildings];
+    private ArrayList<Plant> plant = new ArrayList<>();
     private int population;
     private int infrastructure;
     private int owner;
-    private int distance;
     private int prosperity;
     private int autonomy;
     private int profit;
@@ -23,6 +36,7 @@ public class City {
     private Modificator[] modificator = new Modificator[numberOfModificators];
 
     private Position posArmy;
+
     public boolean CheckPosition(){
         for (int i = -1; i <2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -41,23 +55,22 @@ public class City {
     public int GetEquipment(){
         int equipment = 0;
         for (int i = 0; i<8; i++){
-            equipment += World.equipmentOfSquade[i] * population * World.baseMobilisation * partArmy[i] / 100;
+            equipment += BS.equipmentOfSquade[i] * population * BS.baseMobilisation * partArmy[i] / 100;
         }
         return equipment;
     }
     public int[] Mobilisation(){
         int[] armyMan = new int[8];
         for (int i = 0; i<8; i++){
-            armyMan[i] = population * World.baseMobilisation * partArmy[i] / 100;
+            armyMan[i] = population * BS.baseMobilisation * partArmy[i] / 100;
         }
         return armyMan;
     }
     // тут надо прописать бонусы от домов
     public void UpdateModBuild(){
-
     }
 
-    public void Prosperity(){
+    private void Prosperity(){
         int i = (int) (Math.random() * 100);
         if (i < 10 - prosperity){
             prosperity++;
@@ -68,7 +81,7 @@ public class City {
         int i = (int) (Math.random() * 100);
         int mod = 0;
         for (int j = 0; j < modificator.length; j++){
-            mod += modificator[j].getModExchangeReligion();
+            mod += modificator[j].getModificator()[17];
         }
         if (i < prob - rebelLevel + mod){
             return true;
@@ -79,26 +92,27 @@ public class City {
     public void UpdateRebelLevel(int level){
         rebelLevel = 0;
         for (Modificator value : modificator) {
-            rebelLevel += value.getRebelLevel();
+            rebelLevel += value.getModificator()[3  ];
         }
         rebelLevel -= prosperity - level;
     }
     // возвращает стоимость постройки здания
     public int CostOfBuilding(int number){
-        return (int) (Math.pow(1.2, building[number].getLevel()) * World.baseCostBuild[building[number].getClassOf()] * (100 - prosperity - 2*infrastructure) / 100);
+        return (int) (Math.pow(1.2, building[number].getLevel()) * BS.baseCostBuild[building[number].getClassOf()] *
+                (100 - prosperity - 2*infrastructure) / 100);
     }
     //строит здание
     public void Build(int number){
-        building[number].Upgrage();
+        building[number].StartUpgrading();
         Prosperity();
     }
     // возвращает стоимость постройки завода
     public int CostOfPlant(int number){
-        if (plant.get(number) == null){
-            return World.baseCostPlant * (100 - 2*prosperity) / 100;
-        } else{
-            return (int) ((World.baseCostPlant) * Math.pow(1.3, plant.get(number).getLevelOfPlant()) * (100 - prosperity - 2*infrastructure) / 100);
-        }
+       if (plant.size() > number || plant.get(number) == null){
+           return BS.baseCostPlant * (100 - 2*prosperity) / 100;
+       } else{
+           return (int) ((BS.baseCostPlant) * Math.pow(1.3, plant.get(number).getLevelOfPlant()) * (100 - prosperity - 2*infrastructure) / 100);
+       }
     }
     public void newPlant(int resource){
         plant.add(new Plant(resource));
@@ -106,32 +120,36 @@ public class City {
     }
 
     public int CostOfInfrastructure(){
-        return (int) (Math.pow(1.4, infrastructure) * World.baseCostInfrasructure * (100 - 5* prosperity) / 100);
+        return (int) (Math.pow(1.4, infrastructure) * BS.baseCostInfrasructure * (100 - 5* prosperity) / 100);
     }
-    public void UpgradeInfrasrtucture(){
+    public void UpgradeInfrastructure(){
         infrastructure++;
         Prosperity();
     }
 
-    // методы для вывода общего дохода от производства
+// методы для вывода общего дохода от производства
     public void UpdateProfitFromProduction(){
         profit = 0;
         for (int i =0; i < plant.size(); i++){
             plant.get(i).UpdateProfit();
             profit += plant.get(i).getProfit();
         }
-        profit *= World.baseProfitFromProduction;
+        profit *= BS.baseProfitFromProduction;
+    }
+    public void BuildingTurn(){
+        for (Building value : building) {
+            if (value.getTime() == 1){
+                value.Upgrage();
+                UpdateModBuild();
+            }
+            value.Turn();
+        }
     }
     // метод для вывода дохода от налогов
-    public void UpdateTax(){
-        tax = population * prosperity * (100 - autonomy) * World.baseProfitFromCity / 1000;
+    public void UpdateTax(int mod){
+        tax = population * prosperity * (600 + infrastructure * (100+ mod)) / 700 * (100 - autonomy) * BS.baseProfitFromCity / 300000;
     }
-
-    public City(int population, int infrastructure, int prosperity) {
-        this.population = population;
-        this.infrastructure = infrastructure;
-        this.prosperity = prosperity;
-    }
+    // обновление автономии
 
     public Position getPosition() {
         return position;

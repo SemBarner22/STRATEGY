@@ -5,12 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mygdx.game.Strategy;
 
+import java.util.ArrayList;
+
 public class EconomicsScreen extends AbstractMechanicsScreen {
 
         public EconomicsScreen(Strategy strategy, MechanicsMenu mechanicsMenu) {
                 super(strategy, mechanicsMenu);
         }
-
+        
         @Override
         public void show() {
             super.show();

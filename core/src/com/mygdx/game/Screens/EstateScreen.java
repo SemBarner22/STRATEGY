@@ -1,8 +1,5 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mygdx.game.Strategy;
 
 public class EstateScreen extends AbstractMechanicsScreen {
