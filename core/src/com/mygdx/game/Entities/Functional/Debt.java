@@ -10,6 +10,7 @@ public class Debt {
         this.interest = interest;
         this.time = time;
     }
+    //something unnecessary
 
     public void PayDay(){
         time -=1;
