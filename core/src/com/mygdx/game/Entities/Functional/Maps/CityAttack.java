@@ -11,7 +11,7 @@ public class CityAttack {
     private Position[] cityPosition;
     private CityCoordinate[] cityCoordinate;
 
-    public CityCoordinate CheckPositionCityAttack(Position position){
+    public CityCoordinate CheckPositionCityAttack(Position position) {
         for (int i = 0; i < cityPosition.length; i++) {
             if (Math.abs(position.GetX() - cityPosition[i].GetX()) <= 1 && Math.abs(position.GetY() - cityPosition[i].GetY()) <= 1){
                 return cityCoordinate[i];

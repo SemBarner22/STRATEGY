@@ -18,7 +18,8 @@ public class MapOfArmies {
         return map[position.GetX()][position.GetY()];
     }
     public void moveArmy(Position first, Position last){
-        map[last.GetX()][first.GetY()] = map[first.GetX()][first.GetY()];
+        //TODO
+        map[last.GetX()][last.GetY()] = map[first.GetX()][first.GetY()];
         map[first.GetX()][first.GetY()] = -1;
     }
 
