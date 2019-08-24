@@ -130,7 +130,7 @@ public class PlayScreen implements Screen {
         sr.end();
 
         MapObject provObject = map.getLayers().get("RegionsNew").getObjects().get("Player");
-        Polygon provPlayer = ((PolygonMapObject) playObject).getPolygon();
+        Polygon provPlayer = ((PolygonMapObject) provObject).getPolygon();
         Vector3 v33 = new Vector3(player.getX(), player.getY(), 0);
         gameCam.unproject(v33);
         provPlayer.setPosition(v33.x, v33.y);

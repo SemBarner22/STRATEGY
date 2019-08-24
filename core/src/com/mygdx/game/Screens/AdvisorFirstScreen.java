@@ -29,15 +29,18 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
         super.show();
 
         //Until advisors are created properly
-        PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
-        Advisor a = PlayScreen.world.getPlayerGov().getAdv(0);
+        //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
+        //Advisor a = PlayScreen.world.getPlayerGov().getAdv(0);
         availibleAdvisors = PlayScreen.world.getPlayerGov().getUnasignAdvisors();
-        System.out.println(a.getAbilityName());
+        //System.out.println(a.getAbilityName());
 
         Table table = new Table();
         Button dismissButton = new TextButton("dismiss", skin);
         dismissButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                PlayScreen.world.getPlayerGov().DismissAdvisor(PlayScreen.world.getPlayerGov().AdvisorNumber(place));
+
+                strategy.setScreen(previousScreen);
                 //TODO
             }
         });
@@ -61,9 +64,11 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
                 table.add(buttons.get(i));
                 buttons.get(i).addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
+                        //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
+
+                        //TODO make change advisor i
                         PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place);
-                        System.out.println(place);
+                        //System.out.println(place);
 
 
                         strategy.setScreen(previousScreen);
@@ -77,7 +82,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
                 table.add(buttons.get(i));
                 buttons.get(i).addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
+                        //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
                         //PlayScreen.world.getPlayerGov().AssignAdvisor(0, place);
                         System.out.println(place);
 
@@ -92,7 +97,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
         container.add(scroll).expand().fill().colspan(4);
         container.row();
         container.add(backButton).bottom().left().expandX();
-        //container.add(dismissButton).bottom().right().expandX();
+        container.add(dismissButton).bottom().right().expandX();
     }
 
     @Override

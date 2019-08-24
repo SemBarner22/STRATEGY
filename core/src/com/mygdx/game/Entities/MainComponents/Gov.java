@@ -48,6 +48,9 @@ public class Gov {
             CreateAdvisor("Cleric");
             AssignAdvisor(t, t);
         }
+        for (int t = 0; t < 10; t++) {
+           CreateAdvisor("Diplomat");
+        }
     }
     private boolean isPlayer = true;
 
@@ -264,8 +267,10 @@ public class Gov {
         }
     }
     // убираем советника
+
+    //TODO done: adv without job has Job -1
     public void DismissAdvisor(int adv){
-        advList.get(adv).setHaveJob(0);
+        advList.get(adv).setHaveJob(-1);
     }
     // убиваем советника
     public void KillAdvisor(int adv){
@@ -277,7 +282,7 @@ public class Gov {
     public Integer[] getUnasignAdvisors(){
         ArrayList<Integer> ar = new ArrayList<Integer>();
         for (int i = 0; i< advList.size(); i++){
-            if (advList.get(i).getHaveJob() == 0){
+            if (advList.get(i).getHaveJob() == -1){
                 ar.add(i);
             }
         }
