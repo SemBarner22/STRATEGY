@@ -15,6 +15,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -42,7 +44,7 @@ public class PlayScreen implements Screen {
     private OrthographicCamera gameCam;
     private Viewport gamePort;
 
-    public PlayScreen(Strategy strategy) {
+    public PlayScreen(final Strategy strategy) {
         this.strategy = strategy;
         texture = new Texture("badlogic.jpg");
         gameCam = new OrthographicCamera();
@@ -53,10 +55,6 @@ public class PlayScreen implements Screen {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void show() {
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("res\\map\\grass_tileset_map1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map);
@@ -64,12 +62,14 @@ public class PlayScreen implements Screen {
         sr = new ShapeRenderer();
         sr.setColor(Color.CYAN);
         Gdx.gl.glLineWidth(3);
-        MapObject object = map.getLayers().get("RegionsNew").getObjects().get("Player");
-        Polygon poly = ((PolygonMapObject) object).getPolygon();
         player = new Player(200, -10);
+        gameCam.translate(300, 300);
+    }
+
+    @Override
+    public void show() {
         InputMultiplexer im = new InputMultiplexer(stage, player);
         Gdx.input.setInputProcessor(im);
-        gameCam.translate(300, 300);
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         table = new Table();
         stage.addActor(table);
@@ -87,18 +87,21 @@ public class PlayScreen implements Screen {
         stage.addActor(bottomTable);
         bottomTable.setFillParent(true);
         bottomTable.bottom().pad(10).defaults().expandX().space(100);
-            TextButton mechanicsButton = new TextButton("Mechanics menu", skin);
-            bottomTable.add(mechanicsButton);
-            mechanicsButton.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    strategy.setScreen(new MechanicsMenu(strategy, PlayScreen.this));
-                }
-            });
+        TextButton mechanicsButton = new TextButton("Mechanics menu", skin);
+        bottomTable.add(mechanicsButton);
+        mechanicsButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                strategy.setScreen(new MechanicsMenu(strategy, PlayScreen.this));
+                player.setX(0);
+                player.setY(0);
+            }
+        });
         TextButton moveEndButton = new TextButton("End of the move", skin);
         bottomTable.add(moveEndButton);
         moveEndButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
+                player.setX(0);
+                player.setY(0);
             }
         });
     }
@@ -118,14 +121,20 @@ public class PlayScreen implements Screen {
 
         MapObject playObject = map.getLayers().get("RegionsNew").getObjects().get("Player");
         Polygon regPlayer = ((PolygonMapObject) playObject).getPolygon();
-        regPlayer.setPosition(player.getX(), player.getY());
+        Vector3 v3 = new Vector3(player.getX(), player.getY(), 0);
+        gameCam.unproject(v3);
+        regPlayer.setPosition(v3.x, v3.y);
+        //regPlayer.setPosition(player.getX(), player.getY());
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.polygon(regPlayer.getTransformedVertices());
         sr.end();
 
-        MapObject provObject = map.getLayers().get("Provincions").getObjects().get("Player");
-        Polygon provPlayer = ((PolygonMapObject) provObject).getPolygon();
-        provPlayer.setPosition(player.getX(), player.getY());
+        MapObject provObject = map.getLayers().get("RegionsNew").getObjects().get("Player");
+        Polygon provPlayer = ((PolygonMapObject) playObject).getPolygon();
+        Vector3 v33 = new Vector3(player.getX(), player.getY(), 0);
+        gameCam.unproject(v33);
+        provPlayer.setPosition(v33.x, v33.y);
+        //regPlayer.setPosition(player.getX(), player.getY());
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.polygon(provPlayer.getTransformedVertices());
         sr.end();
@@ -159,6 +168,8 @@ public class PlayScreen implements Screen {
                             object.getProperties().get("RegIndex", Integer.class))});
                     strategy.batch.end();
                     strategy.setScreen(new CityScreen(strategy, PlayScreen.this));
+                    player.setX(0);
+                    player.setY(0);
                 }
             }
         }
@@ -175,6 +186,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void pause() {
+        //System.out.println("heh paused");
     }
 
     @Override

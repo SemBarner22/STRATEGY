@@ -79,7 +79,6 @@ public class ArmiesScreen extends AbstractMechanicsScreen {
 
     @Override
     public void pause() {
-
     }
 
     @Override

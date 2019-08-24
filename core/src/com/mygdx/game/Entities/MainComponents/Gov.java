@@ -43,6 +43,11 @@ public class Gov {
             j++;
             i++;
         }
+
+        for (int t = 0; t < 5; t++) {
+            CreateAdvisor("Cleric");
+            AssignAdvisor(t, t);
+        }
     }
     private boolean isPlayer = true;
 
