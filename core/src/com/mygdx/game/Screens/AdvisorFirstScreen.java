@@ -14,6 +14,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
     private ArrayList<Label> labels;
     private ArrayList<Button> buttons;
     private Integer[] availibleAdvisors;
+    int j = 1;
 
     public AdvisorFirstScreen(Strategy strategy, AdvisorScreen advisorScreen, int place) {
         super(strategy, advisorScreen);
@@ -50,15 +51,21 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
 
         //PlayScreen.world.getPlayerGov().getUnasignAdvisors();
         availibleAdvisors = PlayScreen.world.getPlayerGov().getUnasignAdvisors();
+
+        System.out.println(availibleAdvisors.length);
+
         labels = new ArrayList<>();
         buttons = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             table.row();
+
+            j = i;
+            System.out.println(j);
+
             if (i < availibleAdvisors.length) {
 
                 //labels.add(new Label("" + PlayScreen.world.getPlayerGov().getAdv(availibleAdvisors[i]).getAbilityName(), skin));
                 labels.add(new Label("", skin));
-
                 table.add(labels.get(i)).expandX().fillX();
                 buttons.add(new TextButton("Change", skin));
                 table.add(buttons.get(i));
@@ -66,8 +73,11 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
                     public void clicked(InputEvent event, float x, float y) {
                         //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
 
-                        //TODO make change advisor i
-                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place);
+                        //TODO make change advisor i (testing)
+
+                        //PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors[j], place + 1);
+                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place + 1);
+
                         //System.out.println(place);
 
 
@@ -83,7 +93,13 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
                 buttons.get(i).addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
                         //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
+
+
                         //PlayScreen.world.getPlayerGov().AssignAdvisor(0, place);
+
+                        //TODO
+                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors[j], place + 1);
+                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place + 1);
                         System.out.println(place);
 
 
@@ -103,7 +119,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
     @Override
     public void render(float delta) {
         availibleAdvisors = PlayScreen.world.getPlayerGov().getUnasignAdvisors();
-        System.out.println(availibleAdvisors.length);
+        //System.out.println(availibleAdvisors.length);
         for (int i = 0; i < labels.size(); i++) {
             if (i < availibleAdvisors.length) {
                 labels.get(i).setVisible(true);
