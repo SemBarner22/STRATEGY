@@ -4,7 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.Entities.Adv.Advisor;
+import com.mygdx.game.ExtensionLibrary.ButtonWithIndex;
+import com.mygdx.game.ExtensionLibrary.ClickListenerWithIndex;
 import com.mygdx.game.Strategy;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import java.util.ArrayList;
 public class AdvisorFirstScreen extends AbstractMechanicsScreen {
     private int place;
     private ArrayList<Label> labels;
-    private ArrayList<Button> buttons;
+    private ArrayList<ButtonWithIndex> buttons;
     private Integer[] availibleAdvisors;
-    int j = 1;
+    private Integer[] availibleAdvisorsIndex = new Integer[1000];
+
 
     public AdvisorFirstScreen(Strategy strategy, AdvisorScreen advisorScreen, int place) {
         super(strategy, advisorScreen);
@@ -22,6 +24,9 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
         container = new Table();
         stage.addActor(container);
         this.place = place;
+        for (int i = 0; i < availibleAdvisorsIndex.length; i++) {
+            availibleAdvisorsIndex[i] = i;
+        }
     }
 
 
@@ -59,26 +64,24 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
         for (int i = 0; i < 1000; i++) {
             table.row();
 
-            j = i;
-            System.out.println(j);
-
             if (i < availibleAdvisors.length) {
 
                 //labels.add(new Label("" + PlayScreen.world.getPlayerGov().getAdv(availibleAdvisors[i]).getAbilityName(), skin));
                 labels.add(new Label("", skin));
                 table.add(labels.get(i)).expandX().fillX();
-                buttons.add(new TextButton("Change", skin));
+                buttons.add(new ButtonWithIndex("Change", skin, i));
                 table.add(buttons.get(i));
-                buttons.get(i).addListener(new ClickListener() {
+                buttons.get(i).addListener(new ClickListenerWithIndex(buttons.get(i)) {
                     public void clicked(InputEvent event, float x, float y) {
                         //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
 
                         //TODO make change advisor i (testing)
-
                         //PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors[j], place + 1);
-                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place + 1);
 
-                        //System.out.println(place);
+                        PlayScreen.world.getPlayerGov().AssignAdvisor(
+                                availibleAdvisors[getButtonWithIndex().getIndex()], place + 1);
+
+                        System.out.println(getButtonWithIndex().getIndex());
 
 
                         strategy.setScreen(previousScreen);
@@ -88,9 +91,9 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
             } else {
                 labels.add(new Label("", skin));
                 table.add(labels.get(i)).expandX().fillX();
-                buttons.add(new TextButton("Change", skin));
+                buttons.add(new ButtonWithIndex("Change", skin, i));
                 table.add(buttons.get(i));
-                buttons.get(i).addListener(new ClickListener() {
+                buttons.get(i).addListener(new ClickListenerWithIndex(buttons.get(i)) {
                     public void clicked(InputEvent event, float x, float y) {
                         //PlayScreen.world.getPlayerGov().CreateAdvisor("Cleric");
 
@@ -98,9 +101,11 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
                         //PlayScreen.world.getPlayerGov().AssignAdvisor(0, place);
 
                         //TODO
-                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors[j], place + 1);
-                        PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors.length, place + 1);
-                        System.out.println(place);
+                        //PlayScreen.world.getPlayerGov().AssignAdvisor(availibleAdvisors[j], place + 1);
+                        PlayScreen.world.getPlayerGov().AssignAdvisor(
+                                availibleAdvisors[getButtonWithIndex().getIndex()], place + 1);
+
+                        System.out.println(getButtonWithIndex().getIndex());
 
 
                         strategy.setScreen(previousScreen);
