@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static java.nio.file.Files.readAllLines;
 
@@ -65,6 +66,8 @@ public class World {
             String nextLine;
             lines = new ArrayList<>();
             while ((nextLine = bufferedReader.readLine()) != null) {
+                Logger.getLogger("Pog");
+                System.out.println("Pog");
                 lines.add(nextLine);
             }
         /*try {
