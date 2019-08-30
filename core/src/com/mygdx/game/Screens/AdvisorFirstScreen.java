@@ -67,7 +67,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
             if (i < availibleAdvisors.length) {
 
                 //labels.add(new Label("" + PlayScreen.world.getPlayerGov().getAdv(availibleAdvisors[i]).getAbilityName(), skin));
-                labels.add(new Label("", skin));
+                labels.add(new Label("" + i, skin));
                 table.add(labels.get(i)).expandX().fillX();
                 buttons.add(new ButtonWithIndex("Change", skin, i));
                 table.add(buttons.get(i));
@@ -89,7 +89,7 @@ public class AdvisorFirstScreen extends AbstractMechanicsScreen {
 
                 });
             } else {
-                labels.add(new Label("", skin));
+                labels.add(new Label("" + i, skin));
                 table.add(labels.get(i)).expandX().fillX();
                 buttons.add(new ButtonWithIndex("Change", skin, i));
                 table.add(buttons.get(i));

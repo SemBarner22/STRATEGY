@@ -1,11 +1,13 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Strategy;
 
 import java.util.ArrayList;
@@ -49,6 +51,13 @@ public class CityScreen extends AbstractMechanicsScreen {
         container.add(scroll).expand().fill().colspan(4);
         container.row();
         container.add(backButton).bottom().left();
+        Button test = new TextButton("test", skin);
+        container.add(test).bottom().padLeft(200);
+        test.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                strategy.setScreen(new BuildingsScreen(strategy, CityScreen.this));
+            }
+        });
     }
 
     @Override
