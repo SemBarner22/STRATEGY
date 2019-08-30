@@ -79,7 +79,7 @@ public class Army {
         movement -= (int) Math.sqrt(Math.pow(pos.GetX() - position.GetX(), 2) + Math.pow(pos.GetY() - position.GetY(), 2)) * 10;
         World.mof.moveArmy(position, pos);
     }
-// для создания профессиональных армий
+    // для создания профессиональных армий
     public Army(int country, int modMorale, int modOrganisation, Position position, int prof) {
         this.country = country;
         armyMan = new int[8];
@@ -234,4 +234,3 @@ public class Army {
         this.general = general;
     }
 }
-

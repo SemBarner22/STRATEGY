@@ -1,5 +1,6 @@
 package com.mygdx.game.Entities.MainComponents.GovComponents;
 
+
 import com.mygdx.game.Entities.MainComponents.World;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class Plant {
     private int profit;
     private int upgradeTime;
     private String name;
+    private int mod;
 
     // сделан для вывода дохода от одного предприятия
     public void UpdateProfit(){
@@ -41,7 +43,7 @@ public class Plant {
             if (sClass.equals("CR")) {
                 costs += World.valueCR[sR];
             }
-            profit = levelOfPlant * (World.valueCR[resourceOfPlant] - costs);
+            profit = levelOfPlant * (World.valueCR[resourceOfPlant] * (100 +mod) - costs);
         }
     }
 
@@ -122,5 +124,9 @@ public class Plant {
 
     public String getName() {
         return name;
+    }
+
+    public void setMod(int mod) {
+        this.mod = mod;
     }
 }

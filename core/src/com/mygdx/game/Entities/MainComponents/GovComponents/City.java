@@ -108,11 +108,11 @@ public class City {
     }
     // возвращает стоимость постройки завода
     public int CostOfPlant(int number){
-       if (plant.size() > number || plant.get(number) == null){
-           return BS.baseCostPlant * (100 - 2*prosperity) / 100;
-       } else{
-           return (int) ((BS.baseCostPlant) * Math.pow(1.3, plant.get(number).getLevelOfPlant()) * (100 - prosperity - 2*infrastructure) / 100);
-       }
+        if (plant.size() > number || plant.get(number) == null){
+            return BS.baseCostPlant * (100 - 2*prosperity) / 100;
+        } else{
+            return (int) ((BS.baseCostPlant) * Math.pow(1.3, plant.get(number).getLevelOfPlant()) * (100 - prosperity - 2*infrastructure) / 100);
+        }
     }
     public void newPlant(int resource){
         plant.add(new Plant(resource));
@@ -127,7 +127,7 @@ public class City {
         Prosperity();
     }
 
-// методы для вывода общего дохода от производства
+    // методы для вывода общего дохода от производства
     public void UpdateProfitFromProduction(){
         profit = 0;
         for (int i =0; i < plant.size(); i++){

@@ -18,8 +18,9 @@ import static java.nio.file.Files.readAllLines;
 //* Название ресурсов mineral RR CR
 public class World {
     public World() throws IOException {
-
+        country.add(new Gov());
         //создаем карту для аттак городов
+        /*
         ArrayList<Position> pos = new ArrayList<>();
         ArrayList<CityCoordinate> coord = new ArrayList<>();
         for (int i = 0; i < country.size(); i++){
@@ -38,9 +39,7 @@ public class World {
         }
         CityAttack cityAttack = new CityAttack(positions, cityCoordinates);
 
-
-        //TODO
-        country.add(new Gov());
+         */
     }
 
 
@@ -57,34 +56,27 @@ public class World {
 
     public static List<String> lines;
 
+    /*
     static {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-                //new FileInputStream("src\\Texts\\GovModificator")))) {
-                //TODO
-              new FileInputStream(  "res/CommonText/GovModificator")))) {
+                new FileInputStream("src\\Texts\\GovModificator")))) {
             String nextLine;
-            lines = new ArrayList<>();
             while ((nextLine = bufferedReader.readLine()) != null) {
                 lines.add(nextLine);
             }
-        /*try {
-
-            lines = readAllLines(Paths.get("src\\Texts\\GovModificator"), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-         */
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+     */
 
     public Gov getPlayerGov() {
         return country.get(0);
     }
-        // цены на ресурсы
+
+
+    // цены на ресурсы
 
     public static int[] valueRR = new int[BS.numberOfRR];
     public static int[] valueMineral = new int[BS.numberOfMineral];
@@ -128,39 +120,39 @@ public class World {
                 //проверяем алекватная ли клетка
                 if (!(cityAttack.CheckPositionCityAttack(second) == null |
                         cityAttack.CheckPositionCityAttack(second).getCountry() == army.getCountry())) {
-                            // если нет,то идет захват города
-                            int co = cityAttack.CheckPositionCityAttack(second).getCountry();
-                            int re = cityAttack.CheckPositionCityAttack(second).getRegion();
-                            int ci = cityAttack.CheckPositionCityAttack(second).getCity();
-                            Position cit = country.get(co).getRegionControl().get(re).getCity()[ci].getPosition();
-                            boolean defend = false;
-                            for (int i = -1; i <2; i++){
-                                for (int j = -1; j<2; j++){
-                                    Position posi = new Position(cit.GetX() + i, cit.GetY() +j);
-                                    if (mof.CheckPosition(posi) == co){
-                                        defend = true;
-                                    }
-                                }
-                            }
-                            boolean regionAttack = true;
-                            if (!defend){
-                                country.get(co).getRegionControl().get(re).getCity()[ci].setOwner(army.getCountry());
-                                for (int k = 0; k < country.get(co).getRegionControl().get(re).getCity().length; k++){
-                                    if (country.get(co).getRegionControl().get(re).getCity()[k].getOwner() != army.getCountry()){
-                                        regionAttack = false;
-                                    }
-                                }
-                                if (regionAttack){
-                                    if (country.get(army.getCountry()).getRegion().contains(country.get(co).getRegionControl().get(re))){
-                                        country.get(co).getRegionControl().get(re).setOccupation(false);
-                                    } else {
-                                        country.get(co).getRegionControl().get(re).setOccupation(true);
-                                    }
-                                    country.get(army.getCountry()).getRegionControl().add(country.get(co).getRegionControl().get(re));
-                                    country.get(co).getRegionControl().remove(country.get(co).getRegionControl().get(re));
-                                }
+                    // если нет,то идет захват города
+                    int co = cityAttack.CheckPositionCityAttack(second).getCountry();
+                    int re = cityAttack.CheckPositionCityAttack(second).getRegion();
+                    int ci = cityAttack.CheckPositionCityAttack(second).getCity();
+                    Position cit = country.get(co).getRegionControl().get(re).getCity()[ci].getPosition();
+                    boolean defend = false;
+                    for (int i = -1; i <2; i++){
+                        for (int j = -1; j<2; j++){
+                            Position posi = new Position(cit.GetX() + i, cit.GetY() +j);
+                            if (mof.CheckPosition(posi) == co){
+                                defend = true;
                             }
                         }
+                    }
+                    boolean regionAttack = true;
+                    if (!defend){
+                        country.get(co).getRegionControl().get(re).getCity()[ci].setOwner(army.getCountry());
+                        for (int k = 0; k < country.get(co).getRegionControl().get(re).getCity().length; k++){
+                            if (country.get(co).getRegionControl().get(re).getCity()[k].getOwner() != army.getCountry()){
+                                regionAttack = false;
+                            }
+                        }
+                        if (regionAttack){
+                            if (country.get(army.getCountry()).getRegion().contains(country.get(co).getRegionControl().get(re))){
+                                country.get(co).getRegionControl().get(re).setOccupation(false);
+                            } else {
+                                country.get(co).getRegionControl().get(re).setOccupation(true);
+                            }
+                            country.get(army.getCountry()).getRegionControl().add(country.get(co).getRegionControl().get(re));
+                            country.get(co).getRegionControl().remove(country.get(co).getRegionControl().get(re));
+                        }
+                    }
+                }
                 //тут надо прописать дипломатическую атаку. Пока что дипломатии нет и просто атака всех армий,
             } else if (mof.CheckPosition(second) != army.getCountry()) {
                 Battle(army.getPosition(), second);
@@ -304,11 +296,11 @@ public class World {
         NullArray(totalPlantMineralDemand);
     }
     // все что делается до хода
-    public void preTurn(int i){
+    private void preTurn(int i){
         country.get(i).MakeMoney();
     }
     // неожиданно после хода
-    public void afterTurn(int i){
+    private void afterTurn(int i){
         country.get(i).UpdatePD();
     }
     //после хода всех игроков. Сюдаже пихается дата и прочее
