@@ -10,7 +10,7 @@ public abstract class Advisor {
     protected int level = ((int) (Math.random() * 15)) % 10;
     protected int ability = 0;
     protected int age = (int) (Math.random() * 40) + 100;
-    protected int haveJob;
+    protected int haveJob = -1;
     protected int numChar;
     protected String abilityName;
     // выводить возраст надо деля на 4

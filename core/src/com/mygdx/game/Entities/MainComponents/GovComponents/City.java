@@ -149,6 +149,11 @@ public class City {
     public void UpdateTax(int mod){
         tax = population * prosperity * (600 + infrastructure * (100+ mod)) / 700 * (100 - autonomy) * BS.baseProfitFromCity / 300000;
     }
+    // обновление населения
+    public void updatePopulation(int rate){
+        population *= 1000 + rate + BS.populationRate;
+        population /= 1000;
+    }
     // обновление автономии
 
     public Position getPosition() {

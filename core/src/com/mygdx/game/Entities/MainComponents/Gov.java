@@ -15,7 +15,6 @@ import com.mygdx.game.Entities.MainComponents.GovComponents.Region;
 import com.mygdx.game.Entities.Technology.Tech;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Gov {
     public Gov(){
@@ -85,6 +84,7 @@ public class Gov {
     private int modProfitFromMineral;
     private int modProfitFromCity;
     private int modCityInfrastructure = 0;
+    private int modPopGrow = 0;
 
     private int modCostAdm = 1;
     private int modCostArmy = 1;
@@ -119,6 +119,7 @@ public class Gov {
         modProfitFromCity += array[22];
         modMaxInfr += array[23];
         modPrRes[0] += array[24];
+        modPopGrow += array[25];
     }
     private void NullMod(){
         modAdvisorCost =0;
@@ -146,6 +147,7 @@ public class Gov {
         modProfitFromCity =0;
         modMaxInfr = 0;
         modPrRes[0] = 0;
+        modPopGrow = 0;
     }
 
     public void UpdateMod(){
@@ -434,6 +436,7 @@ public class Gov {
                 aut = 0;
             }
             regionControl.get(i).setAutonomy(aut);
+            regionControl.get(i).updatePopulation(modPopGrow);
             regionControl.get(i).UpdateProfitRR();
             regionControl.get(i).UpdateProfitMineral();
             if (regionControl.get(i).isOccupation()) {
@@ -462,6 +465,8 @@ public class Gov {
                     aut = 0;
                 }
                 regionControl.get(i).getCity()[j].setAutonomy(aut);
+                // обновляем население
+                regionControl.get(i).getCity()[j].updatePopulation(modPopGrow);
                 //обновляем доход от городов
                 for (int a = 0; a < regionControl.get(i).getCity()[j].getPlant().size(); a++){
                     //сеттаем моды производства ресурсов

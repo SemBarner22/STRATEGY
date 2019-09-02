@@ -80,7 +80,11 @@ public class Region {
         rebelLevel -= prosperity - level;
     }
 
-
+    // обновление населения
+    public void updatePopulation(int rate){
+        population *= 1000 + rate + BS.populationRate;
+        population /= 1000;
+    }
 
     // эти два метода сделаны для вывода в окно региона
     public void UpdateProfitRR() {

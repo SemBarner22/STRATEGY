@@ -17,6 +17,7 @@ public class BS {
     public static int baseAdvisorCost = 1;
     public static int baseInterest = 3;
     public static int baseAutonomy = 1;
+    public static int populationRate = 5;
 
     public static int numberOfEvent;
 
