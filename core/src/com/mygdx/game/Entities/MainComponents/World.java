@@ -295,6 +295,21 @@ public class World {
         NullArray(totalPlantRRDemand);
         NullArray(totalPlantMineralDemand);
     }
+    // выдает массив номеров эвентов
+    private int[] event(){
+        int r = (int) (Math.random() * 1000);
+        int ammount;
+        if (r < 10 && r > 0){
+            return new int[]{(int) (Math.random() * BS.numberOfEvent),
+                    (int) (Math.random() * BS.numberOfEvent),
+                    (int) (Math.random() * BS.numberOfEvent)};
+        } else if (r < 100){
+            return new int[]{(int) (Math.random() * BS.numberOfEvent),
+                    (int) (Math.random() * BS.numberOfEvent)};
+        } else if (r < 1000) {
+            return new int[]{(int) (Math.random() * BS.numberOfEvent)};
+        } else return new int[0];
+    }
     // все что делается до хода
     private void preTurn(int i){
         country.get(i).MakeMoney();

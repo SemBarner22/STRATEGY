@@ -12,14 +12,15 @@ public class Event {
     // в идеале еще включение модификатора обновляло бы все необходимое. Но в целом будет нормально, если модификаторы будут работать
     // Только со следующего хода
     private int choiseNum;
-    private int eventNumber;
+    private int number;
     private Modificator[] modificator;
     private int probability;
 
-    public Event(int choiсeNum, int eventNumber, Modificator[] modificator, int probability) {
+    public Event(int choiсeNum, int number, Modificator[] modificator, int probability) {
         this.choiseNum = choiсeNum;
-        this.eventNumber = eventNumber;
+        this.number = number;
         this.modificator = modificator;
         this.probability = probability;
     }
+
 }

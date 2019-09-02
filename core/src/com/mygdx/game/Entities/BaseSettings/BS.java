@@ -19,7 +19,8 @@ public class BS {
     public static int baseAutonomy = 1;
     public static int populationRate = 5;
 
-    public static int numberOfEvent;
+    public static int numberOfEvent = 1;
+    public static int numberOfModificators = 1;
 
     public static int baseNumberOfEstates;
     public static int baseLoyalityIncrease = 1;

@@ -12,6 +12,7 @@ import com.mygdx.game.Entities.Functional.Modificator;
 import com.mygdx.game.Entities.MainComponents.GovComponents.Army;
 import com.mygdx.game.Entities.MainComponents.GovComponents.City;
 import com.mygdx.game.Entities.MainComponents.GovComponents.Region;
+import com.mygdx.game.Entities.Render.ModificatorC;
 import com.mygdx.game.Entities.Technology.Tech;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class Gov {
                 i++;
                 m++;
             }
-            modificator[j] = new Modificator(Integer.parseInt(string.get(k)), string.get(k+1), Integer.parseInt(string.get(k+2)),
+            modifier[j] = new Modificator(Integer.parseInt(string.get(k)), string.get(k+1), Integer.parseInt(string.get(k+2)),
                     BS.numMod, mods[0], mods[1]);
             j++;
             i++;
@@ -91,7 +92,8 @@ public class Gov {
     private int modMaxInfr = 0;
     private int[] modPrRes = new int[BS.numberOfCR];
 
-    private Modificator[] modificator = new Modificator[1];
+    public static ModificatorC modificatorC = new ModificatorC();
+    private Modificator[] modifier = modificatorC.start();
     // обновляем все моды; сначала обнуляем затем добавляем во всех структурах, которые влияют на них
     private void AddToMod(int[] array){
         modAdvisorCost += array[0];
@@ -155,9 +157,9 @@ public class Gov {
         for (int i = 0; i < tech.length; i++){
             AddToMod(tech[i].getBonus());
         }
-        for (int i = 0; i < modificator.length; i++){
-            if (modificator[i].getIs()) {
-                AddToMod(modificator[i].getModificator());
+        for (int i = 0; i < modifier.length; i++){
+            if (modifier[i].getIs()) {
+                AddToMod(modifier[i].getModificator());
             }
 
         }
@@ -814,7 +816,7 @@ public class Gov {
     }
 
     public void ActivateModificator(int i){
-        modificator[i].Activate();
+        modifier[i].Activate();
     }
 
 
